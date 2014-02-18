@@ -49,7 +49,7 @@ endif
 # Specify Target Custom GCC Chains to use:
 
 # ROM
-TARGET_GCC_VERSION_AND := 4.7
+TARGET_GCC_VERSION_AND := 4.8
 
 # KERNEL
 TARGET_GCC_VERSION_ARM := 4.8
@@ -82,16 +82,35 @@ endif
 
 TARGET_NO_UNDEFINED_LDFLAGS := -Wl,--no-undefined
 
-TARGET_arm_CFLAGS :=    -O2 \
+TARGET_arm_CFLAGS :=    -O3 \
                         -fomit-frame-pointer \
-                        -fstrict-aliasing    \
-                        -funswitch-loops
+                        -fstrict-aliasing \
+                        -funswitch-loops \
+                        -fno-tree-vectorize \
+                        -fno-inline-functions \
+                        -Wstrict-aliasing=3 \
+#                        -Wno-error=strict-aliasing
+                        -fgcse-after-reload \
+                        -fno-ipa-cp-clone \
+                        -fno-vect-cost-model \
+                        -Wno-error=unused-parameter \
+                        -Wno-error=unused-but-set-variable
 
 # Modules can choose to compile some source as thumb.
 TARGET_thumb_CFLAGS :=  -mthumb \
                         -Os \
                         -fomit-frame-pointer \
-                        -fno-strict-aliasing
+                        -fstrict-aliasing \
+                        -fno-tree-vectorize \
+                        -fno-inline-functions \
+                        -fno-unswitch-loops \
+                        -Wstrict-aliasing=3 \
+#                        -Wno-error=strict-aliasing
+                        -fgcse-after-reload \
+                        -fno-ipa-cp-clone \
+                        -fno-vect-cost-model \
+                        -Wno-error=unused-parameter \
+                        -Wno-error=unused-but-set-variable
 
 # Set FORCE_ARM_DEBUGGING to "true" in your buildspec.mk
 # or in your environment to force a full arm build, even for
@@ -103,8 +122,8 @@ TARGET_thumb_CFLAGS :=  -mthumb \
 # with -mlong-calls.  When built at -O0, those libraries are
 # too big for a thumb "BL <label>" to go from one end to the other.
 ifeq ($(FORCE_ARM_DEBUGGING),true)
-  TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fno-strict-aliasing
-  TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer
+  TARGET_arm_CFLAGS += -fno-omit-frame-pointer -fstrict-aliasing
+  TARGET_thumb_CFLAGS += -marm -fno-omit-frame-pointer -fstrict-aliasing
 endif
 
 android_config_h := $(call select-android-config-h,linux-arm)
@@ -114,12 +133,15 @@ TARGET_GLOBAL_CFLAGS += \
 			-ffunction-sections \
 			-fdata-sections \
 			-funwind-tables \
+			-fstrict-aliasing \
 			-fstack-protector \
 			-Wa,--noexecstack \
 			-Werror=format-security \
 			-D_FORTIFY_SOURCE=2 \
 			-fno-short-enums \
 			$(arch_variant_cflags) \
+			-Wno-error=unused-parameter \
+			-Wno-error=unused-but-set-variable \
 			-include $(android_config_h) \
 			-I $(dir $(android_config_h))
 
@@ -142,7 +164,7 @@ endif
 # in their exported C++ functions). Also, GCC 4.5 has already
 # removed the warning from the compiler.
 #
-TARGET_GLOBAL_CFLAGS += -Wno-psabi
+TARGET_GLOBAL_CFLAGS += -Wno-psabi -fstrict-aliasing
 
 TARGET_GLOBAL_LDFLAGS += \
 			-Wl,-z,noexecstack \
@@ -153,18 +175,24 @@ TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--icf=safe \
 			$(arch_variant_ldflags)
 
-TARGET_GLOBAL_CFLAGS += -mthumb-interwork
+TARGET_GLOBAL_CFLAGS += -mthumb-interwork -fstrict-aliasing
 
-TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
+TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden -fstrict-aliasing
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
 			-g \
-			-Wstrict-aliasing=2 \
+			-Wstrict-aliasing=3 \
+#			-Wno-error=strict-aliasing
+			-fstrict-aliasing \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
-			-frename-registers
+			-frename-registers \
+			-fno-ipa-cp-clone \
+			-fno-vect-cost-model \
+			-Wno-error=unused-parameter \
+			-Wno-error=unused-but-set-variable
 
 libc_root := bionic/libc
 libm_root := bionic/libm
