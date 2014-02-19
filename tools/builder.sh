@@ -88,4 +88,4 @@ echo -e ${bldgrn}"Total time elapsed:${txtrst} ${grn}$tmin minutes $tsec seconds
 
 echo -e "generating changelog- credit to MBQ_ for the script"
 
-sh ./Changelog.sh
+sh ./changelog.sh
