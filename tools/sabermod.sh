@@ -55,7 +55,7 @@ cd $DIR/frameworks/ex/
 git fetch https://github.com/MWisBest/android_frameworks_ex && git cherry-pick b8f6b2a4b2c432730610d1e88adf572c35d73340
 
 cd $DIR/frameworks/native/
-git fetch https://github.com/MWisBest/android_frameworks_native && git cherry-pick 2c62da77f85aa7a5c8f3401488c2d3f8b5fe0022
+git fetch https://github.com/MWisBest/android_frameworks_native && git cherry-pick ed39461ebc5d1994693e9611854aae8dc4fe8ec6
 
 cd $DIR/frameworks/opt/net/voip/
 git fetch https://github.com/MWisBest/android_frameworks_opt_net_voip && git cherry-pick 93ab325ebdd0f53573ecaa734e238d83c8e834d0
