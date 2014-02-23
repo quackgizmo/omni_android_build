@@ -177,7 +177,7 @@ TARGET_GLOBAL_LDFLAGS += \
 
 TARGET_GLOBAL_CFLAGS += -mthumb-interwork -fstrict-aliasing
 
-TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden -fstrict-aliasing
+TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden -fstrict-aliasing -std=gnu++11
 
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
